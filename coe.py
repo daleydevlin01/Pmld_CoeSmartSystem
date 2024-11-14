@@ -52,8 +52,8 @@ def handle_message(update: Update, context: CallbackContext):
 # Tampilkan menu utama
 def show_main_menu(update: Update, context: CallbackContext):
     keyboard = [
-        [InlineKeyboardButton("Peralatan", callback_data='tools_menu')],
-        [InlineKeyboardButton("Peraturan", callback_data='rules')],
+        [InlineKeyboardButton("Alat", callback_data='tools_menu')],
+        [InlineKeyboardButton("Tata Tertib", callback_data='rules')],
         [InlineKeyboardButton("Pemesanan Ruangan", callback_data='room_booking')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -71,26 +71,53 @@ def handle_main_menu_selection(update: Update, context: CallbackContext):
     data = query.data
 
     if data == 'room_booking':
-        query.edit_message_text(
-            "Silakan isi formulir pemesanan ruangan di sini: [Formulir Pemesanan Ruangan](http://ugm.id/formpenggunaanruanganSmartSystem)",
-            parse_mode='Markdown'
-        )
+        show_room_booking_menu(update, context)
     elif data == 'rules':
-        query.edit_message_text(RULES_TEXT)
+        show_rules_menu(update, context)
     elif data == 'tools_menu':
         show_tools_menu(update, context)
+
+# Tampilkan menu pemesanan ruangan
+def show_room_booking_menu(update: Update, context: CallbackContext):
+    keyboard = [
+        [InlineKeyboardButton("Link Form Peminjaman", url='http://ugm.id/formpenggunaanruanganSmartSystem')],  # Ganti dengan link form peminjaman Anda
+        [InlineKeyboardButton("Kembali ke Menu Utama", callback_data='back_to_main')],
+        [InlineKeyboardButton("Selesai", callback_data='finish')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    chat_id = update.effective_chat.id
+    context.bot.send_message(
+        chat_id,
+        "Menu Pemesanan Ruangan. Silakan pilih:",
+        reply_markup=reply_markup
+    )
+
+
+# Tampilkan menu peraturan
+def show_rules_menu(update: Update, context: CallbackContext):
+    keyboard = [
+        [InlineKeyboardButton("Kembali ke Menu Utama", callback_data='back_to_main')],
+        [InlineKeyboardButton("Keluar", callback_data='exit')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    chat_id = update.effective_chat.id
+    context.bot.send_message(
+        chat_id,
+        RULES_TEXT,
+        reply_markup=reply_markup
+    )
 
 # Tampilkan menu peralatan
 def show_tools_menu(update: Update, context: CallbackContext):
     keyboard = [
-        [InlineKeyboardButton("Mesin Photoplotter", callback_data='photoplotter')],
         [InlineKeyboardButton("Mesin Brushing", callback_data='brushing_milling')],
         [InlineKeyboardButton("Mesin Through Hole Plating", callback_data='thp')],
-        [InlineKeyboardButton("Mesin Spray Etching", callback_data='spray_etching')],
+        [InlineKeyboardButton("Mesin Spray Et ching", callback_data='spray_etching')],
         [InlineKeyboardButton("Mesin Splash Etching", callback_data='splash_etching')],
         [InlineKeyboardButton("Unit Pengolahan Air Limbah", callback_data='wwtu')],
         [InlineKeyboardButton("Mesin Laminasi Film Kering", callback_data='dfl')],
-        [InlineKeyboardButton("Kembali ke Menu Utama", callback_data='back_to_main')]
+        [InlineKeyboardButton("Kembali ke Menu Utama", callback_data='back_to_main')],
+        [InlineKeyboardButton("Selesai", callback_data='finish')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     chat_id = update.effective_chat.id
@@ -108,12 +135,17 @@ def handle_tool_selection(update: Update, context: CallbackContext):
 
     if data == 'back_to_main':
         show_main_menu(update, context)
+        return
+    elif data == 'finish' or data == 'exit':
+        query.edit_message_text("Terima kasih telah menggunakan bot ini. Anda dapat memulai kembali dengan mengetik /start.")
+        return
 
     keyboard = [
         [InlineKeyboardButton("Deskripsi Alat", callback_data=f"{data}_description")],
         [InlineKeyboardButton("Panduan Alat (YouTube)", callback_data=f"{data}_guide")],
         [InlineKeyboardButton("Lokasi Alat (Peta)", callback_data=f"{data}_location")],
-        [InlineKeyboardButton("Kembali ke Daftar Alat", callback_data='tools_menu')]
+        [InlineKeyboardButton("Kembali ke Daftar Alat", callback_data='tools_menu')],
+        [InlineKeyboardButton("Selesai", callback_data='finish')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
@@ -130,7 +162,6 @@ def handle_option_selection(update: Update, context: CallbackContext):
 
     # Deskripsi alat
     descriptions = {
-        'photoplotter_description': 'Mesin Photoplotter digunakan untuk mencetak desain PCB dengan presisi tinggi pada film.',
         'brushing_milling_description': (
             "Mesin penyikat profesional yang dirancang untuk digunakan dalam produksi seri kecil dan laboratorium. Mesin penyikat pemrosesan basah berkualitas tinggi untuk produksi PCB dengan harga murah adalah pilihan yang tepat! Buktinya adalah Bungard RBM 300. Adik perempuan kami yang lebih kecil dari RBM 402 ini dibuat sekecil mungkin tetapi tidak pada kualitas, ketahanan, dan detail presisi tinggi.\n"
             "Fitur:\n"
@@ -173,22 +204,22 @@ def handle_option_selection(update: Update, context: CallbackContext):
             "- Pengering peras mekanis terintegrasi"
         ),
         'wwtu_description': (
-            "sistem pengolahan air limbah modern ini. Ionex merupakan pabrik modern dan kompak untuk mengolah air bilasan yang berasal dari mesin etsa atau pelapisan lubang tembus dari laboratorium pcb."
-            "menawarkan 4 varian dasar, yang berbeda dalam hal keluaran air bilasan dan kapasitas ion. Tipe A dan B dilengkapi dengan pra-filter katun, dua kolom kation, dan kolom netralisasi ph. Tipe KA dan KB memiliki tiga kolom pertukaran ion."
-            "Kolom kation berwarna merah, ketika diisi dengan ion besi dan biru/hijau, ketika diisi dengan ion tembaga. Pemuatan kolom anion dapat diuji dengan mengukur konduktansi air yang dibersihkan."
-            "Fitur:\n"
+            "Sistem pengolahan air limbah modern ini. Ionex merupakan pabrik modern dan kompak untuk mengolah air bilasan yang berasal dari mesin etsa atau pelapisan lubang tembus dari laboratorium PCB."
+            " Menawarkan 4 varian dasar, yang berbeda dalam hal keluaran air bilasan dan kapasitas ion. Tipe A dan B dilengkapi dengan pra-filter katun, dua kolom kation, dan kolom netralisasi pH. Tipe KA dan KB memiliki tiga kolom pertukaran ion."
+            " Kolom kation berwarna merah, ketika diisi dengan ion besi dan biru/hijau, ketika diisi dengan ion tembaga. Pemuatan kolom anion dapat diuji dengan mengukur konduktansi air yang dibersihkan."
+            " Fitur:\n"
             "1. Untuk pasca perawatan etsa dan air bilas galvanik\n"
             "2. Penghapusan padatan dan semua logam berat dengan kebutuhan oksigen kimia\n"
             "3. Bak penampung terpadu berkapasitas 110 l (A/KA) atau 220 l (B/KB) untuk menampung air bilasan\n"
             "4. Perubahan warna yang signifikan saat diisi dengan logam\n"
             "5. Penanganan dan pengoperasian yang mudah serta regenerasi resin pertukaran ion oleh pemasok atau pengguna dengan biaya rendah\n"
-            "6. Netralisasi PH tambahan dan pembuangan ke saluran pembuangan"
+            "6. Netralisasi pH tambahan dan pembuangan ke saluran pembuangan"
         ),
         'dfl_description': (
             "Dry Film Laminator adalah laminator film kering yang dibuat khusus untuk perusahaan kecil, sekolah, departemen penelitian dan pengembangan."
-            "Semua laminasi komersial untuk pembuatan PCB dan teknik etsa cetakan dapat diproses. Berkat kontrol tekanan yang dapat disesuaikan dan kecepatan laminasi yang dapat disesuaikan, aplikasi masker solder juga dapat dilakukan tanpa masalah."
-            "Mesin ini juga digunakan dengan sangat sukses dalam bidang aplikasi lain seperti WAFER MASKING dan produksi SMT STENCIL atau PENGERJAAN LOGAM ."
-            "Fitur:\n"
+            " Semua laminasi komersial untuk pembuatan PCB dan teknik etsa cetakan dapat diproses. Berkat kontrol tekanan yang dapat disesuaikan dan kecepatan laminasi yang dapat disesuaikan, aplikasi masker solder juga dapat dilakukan tanpa masalah."
+            " Mesin ini juga digunakan dengan sangat sukses dalam bidang aplikasi lain seperti WAFER MASKING dan produksi SMT STENCIL atau PENGERJAAN LOGAM."
+            " Fitur:\n"
             "- Pemasangan rol resist mudah dan cepat dengan semua diameter kumparan umum\n"
             "- Meja saluran masuk yang dapat dilepas untuk memudahkan akses ke gulungan resistan bawah\n"
             "- Kecepatan laminasi dapat disesuaikan tanpa batas\n"
@@ -203,18 +234,16 @@ def handle_option_selection(update: Update, context: CallbackContext):
 
     # Link panduan YouTube
     youtube_links = {
-        'photoplotter_guide': 'https://www.youtube.com/watch?v=link_photoplotter',
         'brushing_milling_guide': 'https://youtu.be/LF5Ssw5IagI?si=i5Y_wf22s8Up2ZUJ',
         'thp_guide': 'https://youtu.be/Ex6f8f0ONDY?si=k7drPhmzKJ13jX7G',
         'spray_etching_guide': 'https://youtu.be/4r6z7Hq61ic?si=9gPJwwRnrKSEOBg9',
         'splash_etching_guide': 'https://youtu.be/4r6z7Hq61ic?si=9gPJwwRnrKSEOBg9',
-        'wwtu_guide': 'https://www.youtube.com/watch?v=link_wwtu',
+        'wwtu_guide': 'https://youtu.be/-usoUvP31x8?feature=shared',
         'dfl_guide': 'https://youtu.be/-EeWD3-y4N4?si=SoEH5o3nIxWnO6P7'
     }
 
     # File gambar lokasi
     image_files = {
-        'photoplotter_location': os.path.join(UPLOAD_DIR, 'photoplotter.png'),
         'brushing_milling_location': os.path.join(UPLOAD_DIR, 'brushing_milling.png'),
         'thp_location': os.path.join(UPLOAD_DIR, 'thp.png'),
         'spray_etching_location': os.path.join(UPLOAD_DIR, 'spray_etching.png'),
@@ -257,7 +286,7 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
     dispatcher.add_handler(CallbackQueryHandler(handle_main_menu_selection, pattern='^(rules|room_booking|tools_menu)$'))
-    dispatcher.add_handler(CallbackQueryHandler(handle_tool_selection, pattern='^(photoplotter|brushing_milling|thp|spray_etching|splash_etching|wwtu|dfl|back_to_main)$'))
+    dispatcher.add_handler(CallbackQueryHandler(handle_tool_selection, pattern='^(brushing_milling|thp|spray_etching|splash_etching|wwtu|dfl|back_to_main|finish|exit)$'))
     dispatcher.add_handler(CallbackQueryHandler(handle_option_selection, pattern='.*_(description|guide|location)$'))
 
     updater.start_polling()
