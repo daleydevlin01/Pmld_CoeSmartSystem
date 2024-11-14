@@ -3,45 +3,45 @@ import logging
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, CallbackContext
 
-# Mengatur logging untuk debug
+# Mengatur logging untuk debugging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-# Token dari BotFather (ganti dengan token asli Anda)
+# Token bot dari BotFather (ganti dengan token asli Anda)
 TOKEN = "7800146869:AAEiybVVnXZkQ7qdIevIOi0cqeyOY2NYmPU"  # Ganti dengan token bot Anda
 
-# Direktori untuk menyimpan gambar denah
+# Direktori untuk menyimpan gambar lokasi
 UPLOAD_DIR = './uploads'
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# Variabel untuk menyimpan nama pengguna
+# Dictionary untuk menyimpan nama pengguna
 user_names = {}
 
-# Tata tertib ruangan
+# Teks peraturan ruangan
 RULES_TEXT = """
-Berikut adalah tata tertib yang perlu diperhatikan:
-1. Pengunjung yang menggunakan ruangan/peralatan laboratorium harus dengan sepengetahuan Laboran.
-2. Pengunjung ruangan/laboratorium wajib menjaga kebersihan ruangan/laboratorium.
-3. Membuang sampah harus pada tempat sampah yang sudah disediakan di luar ruangan/laboratorium.
-4. Pengunjung ruangan/laboratorium wajib merapikan kembali peralatan yang telah selesai digunakan.
-5. Pengunjung ruangan/laboratorium dilarang membawa keluar peralatan tanpa izin dari Laboran dan Koordinator Laboratorium.
-6. Pengunjung ruangan/laboratorium wajib menjaga keamanan inventaris ruangan/laboratorium.
-7. Jika terjadi kerusakan dan kehilangan peralatan, pengunjung wajib melapor ke Laboran dan Koordinator Laboratorium untuk ditindaklanjuti.
+Berikut adalah peraturan yang harus diperhatikan:
+1. Pengunjung yang menggunakan ruang/lab harus diketahui oleh Teknisi Lab.
+2. Pengunjung wajib menjaga kebersihan ruang/lab.
+3. Sampah harus dibuang di tempat sampah yang sudah disediakan di luar ruang/lab.
+4. Pengunjung wajib merapikan alat setelah digunakan.
+5. Pengunjung tidak diperkenankan membawa alat keluar ruang/lab tanpa izin dari Teknisi dan Koordinator Lab.
+6. Pengunjung wajib menjaga inventaris lab.
+7. Jika terjadi kerusakan atau kehilangan alat, pengunjung wajib melapor kepada Teknisi dan Koordinator Lab.
 """
 
-# Fungsi untuk menangani /start
+# Handler untuk perintah /start
 def start(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
-    user_names.pop(chat_id, None)  # Hapus nama pengguna jika ada sebelumnya
+    user_names.pop(chat_id, None)  # Menghapus nama pengguna sebelumnya jika ada
     context.bot.send_message(
         chat_id,
         "Halo, selamat datang di bot CoE Smart System. Silakan masukkan nama pengguna Anda:"
     )
 
-# Fungsi untuk menangani nama pengguna
+# Handler pesan untuk menangkap nama pengguna
 def handle_message(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     user_name = update.message.text
-    user_names[chat_id] = user_name  # Simpan nama berdasarkan chat ID
+    user_names[chat_id] = user_name  # Menyimpan nama pengguna berdasarkan ID chat
 
     context.bot.send_message(
         chat_id,
@@ -49,12 +49,12 @@ def handle_message(update: Update, context: CallbackContext):
     )
     show_main_menu(update, context)
 
-# Fungsi untuk menampilkan menu utama
+# Tampilkan menu utama
 def show_main_menu(update: Update, context: CallbackContext):
     keyboard = [
-        [InlineKeyboardButton("Alat", callback_data='tools_menu')],
-        [InlineKeyboardButton("Tata Tertib", callback_data='rules')],
-        [InlineKeyboardButton("Peminjaman Ruang", callback_data='room_booking')]
+        [InlineKeyboardButton("Peralatan", callback_data='tools_menu')],
+        [InlineKeyboardButton("Peraturan", callback_data='rules')],
+        [InlineKeyboardButton("Pemesanan Ruangan", callback_data='room_booking')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     chat_id = update.effective_chat.id
@@ -64,7 +64,7 @@ def show_main_menu(update: Update, context: CallbackContext):
         reply_markup=reply_markup
     )
 
-# Fungsi untuk menangani pilihan menu utama
+# Handler untuk pemilihan menu utama
 def handle_main_menu_selection(update: Update, context: CallbackContext):
     query = update.callback_query
     query.answer()
@@ -72,7 +72,7 @@ def handle_main_menu_selection(update: Update, context: CallbackContext):
 
     if data == 'room_booking':
         query.edit_message_text(
-            "Silakan isi form untuk peminjaman ruang di sini: [Form Peminjaman](http://ugm.id/formpenggunaanruanganSmartSystem)",
+            "Silakan isi formulir pemesanan ruangan di sini: [Formulir Pemesanan Ruangan](http://ugm.id/formpenggunaanruanganSmartSystem)",
             parse_mode='Markdown'
         )
     elif data == 'rules':
@@ -80,27 +80,27 @@ def handle_main_menu_selection(update: Update, context: CallbackContext):
     elif data == 'tools_menu':
         show_tools_menu(update, context)
 
-# Fungsi untuk menampilkan menu alat
+# Tampilkan menu peralatan
 def show_tools_menu(update: Update, context: CallbackContext):
     keyboard = [
-        [InlineKeyboardButton("Photoplotter Machine", callback_data='photoplotter')],
-        [InlineKeyboardButton("Brushing Machine", callback_data='brushing_milling')],
-        [InlineKeyboardButton("Through Hole Plating Machine", callback_data='thp')],
-        [InlineKeyboardButton("Spray Etching Machine", callback_data='spray_etching')],
-        [InlineKeyboardButton("Splash Etching Machine", callback_data='splash_etching')],
-        [InlineKeyboardButton("Waste Water Treatment Unit", callback_data='wwtu')],
-        [InlineKeyboardButton("Dry Film Laminator Machine", callback_data='dfl')],
+        [InlineKeyboardButton("Mesin Photoplotter", callback_data='photoplotter')],
+        [InlineKeyboardButton("Mesin Brushing", callback_data='brushing_milling')],
+        [InlineKeyboardButton("Mesin Through Hole Plating", callback_data='thp')],
+        [InlineKeyboardButton("Mesin Spray Etching", callback_data='spray_etching')],
+        [InlineKeyboardButton("Mesin Splash Etching", callback_data='splash_etching')],
+        [InlineKeyboardButton("Unit Pengolahan Air Limbah", callback_data='wwtu')],
+        [InlineKeyboardButton("Mesin Laminasi Film Kering", callback_data='dfl')],
         [InlineKeyboardButton("Kembali ke Menu Utama", callback_data='back_to_main')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     chat_id = update.effective_chat.id
     context.bot.send_message(
         chat_id,
-        "Pilih alat yang ingin Anda pelajari:",
+        "Pilih peralatan yang ingin Anda pelajari:",
         reply_markup=reply_markup
     )
 
-# Fungsi untuk menangani pilihan alat
+# Handler untuk pemilihan peralatan
 def handle_tool_selection(update: Update, context: CallbackContext):
     query = update.callback_query
     query.answer()
@@ -112,7 +112,7 @@ def handle_tool_selection(update: Update, context: CallbackContext):
     keyboard = [
         [InlineKeyboardButton("Deskripsi Alat", callback_data=f"{data}_description")],
         [InlineKeyboardButton("Panduan Alat (YouTube)", callback_data=f"{data}_guide")],
-        [InlineKeyboardButton("Lokasi Alat (Denah)", callback_data=f"{data}_location")],
+        [InlineKeyboardButton("Lokasi Alat (Peta)", callback_data=f"{data}_location")],
         [InlineKeyboardButton("Kembali ke Daftar Alat", callback_data='tools_menu')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -122,7 +122,7 @@ def handle_tool_selection(update: Update, context: CallbackContext):
         reply_markup=reply_markup
     )
 
-# Fungsi untuk menangani deskripsi, panduan, dan denah alat
+# Handler untuk deskripsi, panduan, dan lokasi
 def handle_option_selection(update: Update, context: CallbackContext):
     query = update.callback_query
     query.answer()
@@ -130,27 +130,89 @@ def handle_option_selection(update: Update, context: CallbackContext):
 
     # Deskripsi alat
     descriptions = {
-        'photoplotter_description': 'Photoplotter digunakan untuk mencetak desain PCB pada film dengan akurasi tinggi.',
-        'brushing_milling_description': 'Brushing Machine membersihkan permukaan PCB sebelum proses selanjutnya.',
-        'thp_description': 'Through Hole Plating Machine melapisi lubang PCB agar dapat menghantarkan listrik antar lapisan.',
-        'spray_etching_description': 'Spray Etching Machine menghilangkan tembaga berlebih dari PCB dengan larutan kimia.',
-        'splash_etching_description': 'Splash Etching Machine etsa PCB dengan menyemprotkan larutan kimia.',
-        'wwtu_description': 'Waste Water Treatment Unit mengolah limbah cair dari proses fabrikasi PCB.',
-        'dfl_description': 'Dry Film Laminator melapisi PCB dengan film kering sebelum eksposur UV.'
+        'photoplotter_description': 'Mesin Photoplotter digunakan untuk mencetak desain PCB dengan presisi tinggi pada film.',
+        'brushing_milling_description': (
+            "Mesin penyikat profesional yang dirancang untuk digunakan dalam produksi seri kecil dan laboratorium. Mesin penyikat pemrosesan basah berkualitas tinggi untuk produksi PCB dengan harga murah adalah pilihan yang tepat! Buktinya adalah Bungard RBM 300. Adik perempuan kami yang lebih kecil dari RBM 402 ini dibuat sekecil mungkin tetapi tidak pada kualitas, ketahanan, dan detail presisi tinggi.\n"
+            "Fitur:\n"
+            "a. RBM 300 memiliki sikat berosilasi dengan perangkat penggantian cepat\n"
+            "b. Frekuensi osilasi dan kecepatan transportasi adalah variabel stepless\n"
+            "c. Penyesuaian ketinggian paralel. Berbeda dengan penyesuaian ketinggian satu sisi, Anda akan memperoleh hasil penyikatan yang merata dalam jangka panjang hanya dengan penyesuaian ketinggian paralel dua sisi\n"
+            "d. Mesin dilengkapi dengan sikat akhir yang digunakan sebelum laminasi. Tersedia berbagai sikat"
+        ),
+        'thp_description': (
+            "Mesin dari seri COMPACTA ini dirancang untuk memenuhi tuntutan metalisasi langsung profesional. Mesin ini dapat menangani papan hingga 210 x 300 mm² dan memiliki 5 tangki perawatan (pembersihan - pra-celup - katalis - intensifier - tangki cadangan) dan satu tangki pelapisan galvanik, "
+            "Dua tangki perawatan dikontrol secara termostatik dan dilengkapi dengan pemanas teflon. Pergerakan bak pada semua tangki dilakukan dengan motor DCgear. Kecepatan langkah adalah variabel stepless. "
+            "Tangki pelapisan galvanik dilengkapi dengan injeksi udara terintegrasi dan penyearah teregulasi stepless. Volt- dan Amperemeter menunjukkan nilai listrik saat ini. Penekanan khusus diberikan pada teknik pembilasan yang unik. Pembilasan kaskade ganda dan pembilasan semprot, yang terakhir diaktifkan melalui sakelar kaki dan katup magnetik, merupakan bagian integral dari COMPACTA 30. "
+        ),
+        'spray_etching_description': (
+            "Mesin Spray Etching, dikenal sebagai Splash Center/Splash Center XL, adalah mesin etsa laboratorium dengan pembilasan "
+            "statis dan semprot, tangki pengembang terintegrasi, tangki cadangan untuk pelapisan kimia, dan pengering tekan. Cocok untuk PCB dua sisi, "
+            "dengan alur kerja yang ergonomis dan bersih serta hambatan kimia yang rendah. Alur kerja umum:\n\n"
+            "1. Tangki 1 (kompartemen semprot) untuk etsa\n"
+            "2. Tangki 2 dan 3 untuk pembilasan\n"
+            "3. Tangki 4 (dengan pompa sentrifugal) untuk pengembangan\n"
+            "4. Tangki 5 untuk pelapisan\n\n"
+            "Fitur:\n"
+            "- 5 katup bola untuk menguras semua tangki, penutup terlindungi dari depan\n"
+            "- Semua tangki dengan tutup\n"
+            "- Baki tetes terintegrasi untuk semua tangki, dipasang sekitar 120 mm di atas tanah\n"
+            "- Pengering peras mekanis terintegrasi"
+        ),
+        'splash_etching_description': (
+            "Mesin splash Etching, dikenal sebagai Splash Center/Splash Center XL, adalah mesin etsa laboratorium dengan pembilasan "
+            "statis dan semprot, tangki pengembang terintegrasi, tangki cadangan untuk pelapisan kimia, dan pengering tekan. Cocok untuk PCB dua sisi, "
+            "dengan alur kerja yang ergonomis dan bersih serta hambatan kimia yang rendah. Alur kerja umum:\n\n"
+            "1. Tangki 1 (kompartemen semprot) untuk etsa\n"
+            "2. Tangki 2 dan 3 untuk pembilasan\n"
+            "3. Tangki 4 (dengan pompa sentrifugal) untuk pengembangan\n"
+            "4. Tangki 5 untuk pelapisan\n\n"
+            "Fitur:\n"
+            "- 5 katup bola untuk menguras semua tangki, penutup terlindungi dari depan\n"
+            "- Semua tangki dengan tutup\n"
+            "- Baki tetes terintegrasi untuk semua tangki, dipasang sekitar 120 mm di atas tanah\n"
+            "- Pengering peras mekanis terintegrasi"
+        ),
+        'wwtu_description': (
+            "sistem pengolahan air limbah modern ini. Ionex merupakan pabrik modern dan kompak untuk mengolah air bilasan yang berasal dari mesin etsa atau pelapisan lubang tembus dari laboratorium pcb."
+            "menawarkan 4 varian dasar, yang berbeda dalam hal keluaran air bilasan dan kapasitas ion. Tipe A dan B dilengkapi dengan pra-filter katun, dua kolom kation, dan kolom netralisasi ph. Tipe KA dan KB memiliki tiga kolom pertukaran ion."
+            "Kolom kation berwarna merah, ketika diisi dengan ion besi dan biru/hijau, ketika diisi dengan ion tembaga. Pemuatan kolom anion dapat diuji dengan mengukur konduktansi air yang dibersihkan."
+            "Fitur:\n"
+            "1. Untuk pasca perawatan etsa dan air bilas galvanik\n"
+            "2. Penghapusan padatan dan semua logam berat dengan kebutuhan oksigen kimia\n"
+            "3. Bak penampung terpadu berkapasitas 110 l (A/KA) atau 220 l (B/KB) untuk menampung air bilasan\n"
+            "4. Perubahan warna yang signifikan saat diisi dengan logam\n"
+            "5. Penanganan dan pengoperasian yang mudah serta regenerasi resin pertukaran ion oleh pemasok atau pengguna dengan biaya rendah\n"
+            "6. Netralisasi PH tambahan dan pembuangan ke saluran pembuangan"
+        ),
+        'dfl_description': (
+            "Dry Film Laminator adalah laminator film kering yang dibuat khusus untuk perusahaan kecil, sekolah, departemen penelitian dan pengembangan."
+            "Semua laminasi komersial untuk pembuatan PCB dan teknik etsa cetakan dapat diproses. Berkat kontrol tekanan yang dapat disesuaikan dan kecepatan laminasi yang dapat disesuaikan, aplikasi masker solder juga dapat dilakukan tanpa masalah."
+            "Mesin ini juga digunakan dengan sangat sukses dalam bidang aplikasi lain seperti WAFER MASKING dan produksi SMT STENCIL atau PENGERJAAN LOGAM ."
+            "Fitur:\n"
+            "- Pemasangan rol resist mudah dan cepat dengan semua diameter kumparan umum\n"
+            "- Meja saluran masuk yang dapat dilepas untuk memudahkan akses ke gulungan resistan bawah\n"
+            "- Kecepatan laminasi dapat disesuaikan tanpa batas\n"
+            "- Rol laminasi berpemanas listrik dengan distribusi suhu yang seragam\n"
+            "- Rol pengangkut terpisah untuk pengangkutan laminasi tanpa kusut\n"
+            "- Pengaturan digital dan pembacaan suhu laminasi\n"
+            "- Tekanan laminasi yang dapat disesuaikan secara manual\n"
+            "- Untuk semua film kering umum yang resistan dengan diameter inti 3 dan 5 inci\n"
+            "- Cocok untuk aplikasi masker solder"
+        ),
     }
 
-    # Link panduan video YouTube
+    # Link panduan YouTube
     youtube_links = {
         'photoplotter_guide': 'https://www.youtube.com/watch?v=link_photoplotter',
-        'brushing_milling_guide': 'https://www.youtube.com/watch?v=link_brushing_milling',
-        'thp_guide': 'https://www.youtube.com/watch?v=link_thp',
-        'spray_etching_guide': 'https://www.youtube.com/watch?v=link_spray_etching',
-        'splash_etching_guide': 'https://www.youtube.com/watch?v=link_splash_etching',
+        'brushing_milling_guide': 'https://youtu.be/LF5Ssw5IagI?si=i5Y_wf22s8Up2ZUJ',
+        'thp_guide': 'https://youtu.be/Ex6f8f0ONDY?si=k7drPhmzKJ13jX7G',
+        'spray_etching_guide': 'https://youtu.be/4r6z7Hq61ic?si=9gPJwwRnrKSEOBg9',
+        'splash_etching_guide': 'https://youtu.be/4r6z7Hq61ic?si=9gPJwwRnrKSEOBg9',
         'wwtu_guide': 'https://www.youtube.com/watch?v=link_wwtu',
-        'dfl_guide': 'https://www.youtube.com/watch?v=link_dfl'
+        'dfl_guide': 'https://youtu.be/-EeWD3-y4N4?si=SoEH5o3nIxWnO6P7'
     }
 
-    # Gambar denah lokasi alat
+    # File gambar lokasi
     image_files = {
         'photoplotter_location': os.path.join(UPLOAD_DIR, 'photoplotter.png'),
         'brushing_milling_location': os.path.join(UPLOAD_DIR, 'brushing_milling.png'),
@@ -163,41 +225,40 @@ def handle_option_selection(update: Update, context: CallbackContext):
 
     chat_id = query.message.chat_id
 
-    # Mengirim Deskripsi Alat
+    # Kirim deskripsi alat
     if data.endswith('_description'):
         description = descriptions.get(data)
         if description:
             context.bot.send_message(chat_id, description)
         else:
-            context.bot.send_message(chat_id, "Deskripsi untuk alat ini tidak tersedia.")
+            context.bot.send_message(chat_id, "Deskripsi untuk alat ini belum tersedia.")
 
-    # Mengirim Panduan Video YouTube
+    # Kirim link panduan YouTube
     elif data.endswith('_guide'):
-        youtube_link = youtube_links.get(data)
-        if youtube_link:
-            context.bot.send_message(chat_id, f"Panduan Alat: {youtube_link}")
+        link = youtube_links.get(data)
+        if link:
+            context.bot.send_message(chat_id, f"Panduan YouTube dapat dilihat di sini: {link}")
         else:
-            context.bot.send_message(chat_id, "Panduan YouTube untuk alat ini tidak tersedia.")
+            context.bot.send_message(chat_id, "Panduan untuk alat ini belum tersedia.")
 
-    # Mengirim Denah Lokasi Alat
+    # Kirim gambar lokasi alat
     elif data.endswith('_location'):
-        image_file = image_files.get(data)
-        if image_file and os.path.exists(image_file):
-            context.bot.send_photo(chat_id, photo=open(image_file, 'rb'))
+        image_path = image_files.get(data)
+        if image_path and os.path.exists(image_path):
+            context.bot.send_photo(chat_id, open(image_path, 'rb'))
         else:
-            context.bot.send_message(chat_id, "Lokasi alat ini tidak tersedia.")
+            context.bot.send_message(chat_id, "Gambar lokasi untuk alat ini belum tersedia.")
 
-# Fungsi utama untuk menjalankan bot
+# Fungsi utama
 def main():
     updater = Updater(TOKEN, use_context=True)
     dispatcher = updater.dispatcher
 
-    # Menambahkan handler untuk command dan callback
-    dispatcher.add_handler(CommandHandler('start', start))
+    dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
-    dispatcher.add_handler(CallbackQueryHandler(handle_main_menu_selection, pattern='^(tools_menu|rules|room_booking)$'))
-    dispatcher.add_handler(CallbackQueryHandler(handle_tool_selection, pattern='^(photoplotter|brushing_milling|thp|spray_etching|splash_etching|wwtu|dfl)$'))
-    dispatcher.add_handler(CallbackQueryHandler(handle_option_selection))
+    dispatcher.add_handler(CallbackQueryHandler(handle_main_menu_selection, pattern='^(rules|room_booking|tools_menu)$'))
+    dispatcher.add_handler(CallbackQueryHandler(handle_tool_selection, pattern='^(photoplotter|brushing_milling|thp|spray_etching|splash_etching|wwtu|dfl|back_to_main)$'))
+    dispatcher.add_handler(CallbackQueryHandler(handle_option_selection, pattern='.*_(description|guide|location)$'))
 
     updater.start_polling()
     updater.idle()
