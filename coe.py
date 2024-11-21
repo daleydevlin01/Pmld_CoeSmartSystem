@@ -112,7 +112,7 @@ def show_tools_menu(update: Update, context: CallbackContext):
     keyboard = [
         [InlineKeyboardButton("Mesin Brushing", callback_data='brushing_milling')],
         [InlineKeyboardButton("Mesin Through Hole Plating", callback_data='thp')],
-        [InlineKeyboardButton("Mesin Spray Et ching", callback_data='spray_etching')],
+        [InlineKeyboardButton("Unit paparan vakum", callback_data='hellas')],
         [InlineKeyboardButton("Mesin Splash Etching", callback_data='splash_etching')],
         [InlineKeyboardButton("Unit Pengolahan Air Limbah", callback_data='wwtu')],
         [InlineKeyboardButton("Mesin Laminasi Film Kering", callback_data='dfl')],
@@ -164,6 +164,8 @@ def handle_option_selection(update: Update, context: CallbackContext):
     descriptions = {
         'brushing_milling_description': (
             "Mesin penyikat profesional yang dirancang untuk digunakan dalam produksi seri kecil dan laboratorium. Mesin penyikat pemrosesan basah berkualitas tinggi untuk produksi PCB dengan harga murah adalah pilihan yang tepat! Buktinya adalah Bungard RBM 300. Adik perempuan kami yang lebih kecil dari RBM 402 ini dibuat sekecil mungkin tetapi tidak pada kualitas, ketahanan, dan detail presisi tinggi.\n"
+            " \n"
+            " \n"            
             "Fitur:\n"
             "a. RBM 300 memiliki sikat berosilasi dengan perangkat penggantian cepat\n"
             "b. Frekuensi osilasi dan kecepatan transportasi adalah variabel stepless\n"
@@ -175,19 +177,21 @@ def handle_option_selection(update: Update, context: CallbackContext):
             "Dua tangki perawatan dikontrol secara termostatik dan dilengkapi dengan pemanas teflon. Pergerakan bak pada semua tangki dilakukan dengan motor DCgear. Kecepatan langkah adalah variabel stepless. "
             "Tangki pelapisan galvanik dilengkapi dengan injeksi udara terintegrasi dan penyearah teregulasi stepless. Volt- dan Amperemeter menunjukkan nilai listrik saat ini. Penekanan khusus diberikan pada teknik pembilasan yang unik. Pembilasan kaskade ganda dan pembilasan semprot, yang terakhir diaktifkan melalui sakelar kaki dan katup magnetik, merupakan bagian integral dari COMPACTA 30. "
         ),
-        'spray_etching_description': (
-            "Mesin Spray Etching, dikenal sebagai Splash Center/Splash Center XL, adalah mesin etsa laboratorium dengan pembilasan "
-            "statis dan semprot, tangki pengembang terintegrasi, tangki cadangan untuk pelapisan kimia, dan pengering tekan. Cocok untuk PCB dua sisi, "
-            "dengan alur kerja yang ergonomis dan bersih serta hambatan kimia yang rendah. Alur kerja umum:\n\n"
-            "1. Tangki 1 (kompartemen semprot) untuk etsa\n"
-            "2. Tangki 2 dan 3 untuk pembilasan\n"
-            "3. Tangki 4 (dengan pompa sentrifugal) untuk pengembangan\n"
-            "4. Tangki 5 untuk pelapisan\n\n"
+        'hellas_description': (
+            "Unit pemaparan vakum presisi untuk pemaparan kontak dua sisi dari bahan dasar yang dilapisi foto, film cetak, dan banyak lagi"
+            "Dengan unit vakum Hellas, Anda dapat memproses semua produk fotosensitif dengan sensitivitas spektral dalam rentang UV dekat (360-400nm)"
+            "Produk-produk ini terutama PCB yang dilapisi foto positif atau negatif, pelat cetak yang terbuat dari nilon, aluminium, baja, dan diazo serta film transfer."
+            " \n"
+            " \n"
             "Fitur:\n"
-            "- 5 katup bola untuk menguras semua tangki, penutup terlindungi dari depan\n"
-            "- Semua tangki dengan tutup\n"
-            "- Baki tetes terintegrasi untuk semua tangki, dipasang sekitar 120 mm di atas tanah\n"
-            "- Pengering peras mekanis terintegrasi"
+            "- 2 x 6 tabung UV superaktinik, masing-masing 18 W\n"
+            "- Reflektor khusus untuk undercut minimum\n"
+            "- Tampilan emisi cahaya analog\n"
+            "- Permukaan paparan bawah dari kaca khusus 8 mm\n"
+            "- Area paparan atas dari foil mylar terstruktur dalam bingkai yang kokoh dan area kerja 570 x 300 mm yang cocok untuk PCB garis halus\n"
+            "- Vakum bebas perawatan (>60%) dengan tampilan pengukur, peringkat kontinu 1380 l/jam\n"
+            "- Timer digital 1 detik - 9 menit 59 detik dengan hitungan mundur, pengaturan ulang otomatis, dan beeper\n"
+            "- Kipas pendingin internal memungkinkan proses pemaparan atau pemanggangan dalam waktu lama"
         ),
         'splash_etching_description': (
             "Mesin splash Etching, dikenal sebagai Splash Center/Splash Center XL, adalah mesin etsa laboratorium dengan pembilasan "
@@ -197,6 +201,8 @@ def handle_option_selection(update: Update, context: CallbackContext):
             "2. Tangki 2 dan 3 untuk pembilasan\n"
             "3. Tangki 4 (dengan pompa sentrifugal) untuk pengembangan\n"
             "4. Tangki 5 untuk pelapisan\n\n"
+            " \n"
+            " \n"
             "Fitur:\n"
             "- 5 katup bola untuk menguras semua tangki, penutup terlindungi dari depan\n"
             "- Semua tangki dengan tutup\n"
@@ -207,6 +213,8 @@ def handle_option_selection(update: Update, context: CallbackContext):
             "Sistem pengolahan air limbah modern ini. Ionex merupakan pabrik modern dan kompak untuk mengolah air bilasan yang berasal dari mesin etsa atau pelapisan lubang tembus dari laboratorium PCB."
             " Menawarkan 4 varian dasar, yang berbeda dalam hal keluaran air bilasan dan kapasitas ion. Tipe A dan B dilengkapi dengan pra-filter katun, dua kolom kation, dan kolom netralisasi pH. Tipe KA dan KB memiliki tiga kolom pertukaran ion."
             " Kolom kation berwarna merah, ketika diisi dengan ion besi dan biru/hijau, ketika diisi dengan ion tembaga. Pemuatan kolom anion dapat diuji dengan mengukur konduktansi air yang dibersihkan."
+            " \n"
+            " \n"
             " Fitur:\n"
             "1. Untuk pasca perawatan etsa dan air bilas galvanik\n"
             "2. Penghapusan padatan dan semua logam berat dengan kebutuhan oksigen kimia\n"
@@ -219,6 +227,8 @@ def handle_option_selection(update: Update, context: CallbackContext):
             "Dry Film Laminator adalah laminator film kering yang dibuat khusus untuk perusahaan kecil, sekolah, departemen penelitian dan pengembangan."
             " Semua laminasi komersial untuk pembuatan PCB dan teknik etsa cetakan dapat diproses. Berkat kontrol tekanan yang dapat disesuaikan dan kecepatan laminasi yang dapat disesuaikan, aplikasi masker solder juga dapat dilakukan tanpa masalah."
             " Mesin ini juga digunakan dengan sangat sukses dalam bidang aplikasi lain seperti WAFER MASKING dan produksi SMT STENCIL atau PENGERJAAN LOGAM."
+            " \n"
+            " \n"
             " Fitur:\n"
             "- Pemasangan rol resist mudah dan cepat dengan semua diameter kumparan umum\n"
             "- Meja saluran masuk yang dapat dilepas untuk memudahkan akses ke gulungan resistan bawah\n"
@@ -236,7 +246,7 @@ def handle_option_selection(update: Update, context: CallbackContext):
     youtube_links = {
         'brushing_milling_guide': 'https://youtu.be/LF5Ssw5IagI?si=i5Y_wf22s8Up2ZUJ',
         'thp_guide': 'https://youtu.be/Ex6f8f0ONDY?si=k7drPhmzKJ13jX7G',
-        'spray_etching_guide': 'https://youtu.be/4r6z7Hq61ic?si=9gPJwwRnrKSEOBg9',
+        'hellas_guide': 'https://youtu.be/tHK9b2zqM_s?feature=shared',
         'splash_etching_guide': 'https://youtu.be/4r6z7Hq61ic?si=9gPJwwRnrKSEOBg9',
         'wwtu_guide': 'https://youtu.be/-usoUvP31x8?feature=shared',
         'dfl_guide': 'https://youtu.be/-EeWD3-y4N4?si=SoEH5o3nIxWnO6P7'
@@ -246,7 +256,7 @@ def handle_option_selection(update: Update, context: CallbackContext):
     image_files = {
         'brushing_milling_location': os.path.join(UPLOAD_DIR, 'brushing_milling.png'),
         'thp_location': os.path.join(UPLOAD_DIR, 'thp.png'),
-        'spray_etching_location': os.path.join(UPLOAD_DIR, 'spray_etching.png'),
+        'hellas_location': os.path.join(UPLOAD_DIR, 'hellas.png'),
         'splash_etching_location': os.path.join(UPLOAD_DIR, 'splash_etching.png'),
         'wwtu_location': os.path.join(UPLOAD_DIR, 'wwtu.png'),
         'dfl_location': os.path.join(UPLOAD_DIR, 'dfl.png')
@@ -286,7 +296,7 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
     dispatcher.add_handler(CallbackQueryHandler(handle_main_menu_selection, pattern='^(rules|room_booking|tools_menu)$'))
-    dispatcher.add_handler(CallbackQueryHandler(handle_tool_selection, pattern='^(brushing_milling|thp|spray_etching|splash_etching|wwtu|dfl|back_to_main|finish|exit)$'))
+    dispatcher.add_handler(CallbackQueryHandler(handle_tool_selection, pattern='^(brushing_milling|thp|hellas|splash_etching|wwtu|dfl|back_to_main|finish|exit)$'))
     dispatcher.add_handler(CallbackQueryHandler(handle_option_selection, pattern='.*_(description|guide|location)$'))
 
     updater.start_polling()
