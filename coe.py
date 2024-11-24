@@ -112,10 +112,11 @@ def show_tools_menu(update: Update, context: CallbackContext):
     keyboard = [
         [InlineKeyboardButton("Mesin Brushing", callback_data='brushing_milling')],
         [InlineKeyboardButton("Mesin Through Hole Plating", callback_data='thp')],
-        [InlineKeyboardButton("Unit paparan vakum", callback_data='hellas')],
+        [InlineKeyboardButton("Unit Paparan Vakum", callback_data='hellas')],
         [InlineKeyboardButton("Mesin Splash Etching", callback_data='splash_etching')],
         [InlineKeyboardButton("Unit Pengolahan Air Limbah", callback_data='wwtu')],
         [InlineKeyboardButton("Mesin Laminasi Film Kering", callback_data='dfl')],
+        [InlineKeyboardButton("Mesin Pengeboran dan Penggilingan", callback_data='cnc')],
         [InlineKeyboardButton("Kembali ke Menu Utama", callback_data='back_to_main')],
         [InlineKeyboardButton("Selesai", callback_data='finish')]
     ]
@@ -143,7 +144,7 @@ def handle_tool_selection(update: Update, context: CallbackContext):
     keyboard = [
         [InlineKeyboardButton("Deskripsi Alat", callback_data=f"{data}_description")],
         [InlineKeyboardButton("Panduan Alat (YouTube)", callback_data=f"{data}_guide")],
-        [InlineKeyboardButton("Lokasi Alat (Peta)", callback_data=f"{data}_location")],
+        [InlineKeyboardButton("Lokasi Alat (Denah)", callback_data=f"{data}_location")],
         [InlineKeyboardButton("Kembali ke Daftar Alat", callback_data='tools_menu')],
         [InlineKeyboardButton("Selesai", callback_data='finish')]
     ]
@@ -164,7 +165,6 @@ def handle_option_selection(update: Update, context: CallbackContext):
     descriptions = {
         'brushing_milling_description': (
             "Mesin penyikat profesional yang dirancang untuk digunakan dalam produksi seri kecil dan laboratorium. Mesin penyikat pemrosesan basah berkualitas tinggi untuk produksi PCB dengan harga murah adalah pilihan yang tepat! Buktinya adalah Bungard RBM 300. Adik perempuan kami yang lebih kecil dari RBM 402 ini dibuat sekecil mungkin tetapi tidak pada kualitas, ketahanan, dan detail presisi tinggi.\n"
-            " \n"
             " \n"            
             "Fitur:\n"
             "a. RBM 300 memiliki sikat berosilasi dengan perangkat penggantian cepat\n"
@@ -240,6 +240,11 @@ def handle_option_selection(update: Update, context: CallbackContext):
             "- Untuk semua film kering umum yang resistan dengan diameter inti 3 dan 5 inci\n"
             "- Cocok untuk aplikasi masker solder"
         ),
+        'cnc_description': (
+            "Perangkat pengeboran dan penggilingan berkualitas tinggi yang dirancang untuk memproduksi PCB serta mengukir material seperti plastik, aluminium, dan logam lainnya. Mesin ini tersedia dalam beberapa varian, yaitu CCD/MTC, CCD/MTC XL, CCD/ATC, dan CCD/ATC XL, "
+            "yang dibedakan berdasarkan ukuran area kerja dan sistem pergantian alat. Model CCD/MTC dan CCD/MTC XL menggunakan pergantian alat manual (semi-otomatis), dengan area kerja masing-masing 325 x 495 mm dan 500 x 600 mm. CCD/ATC dan CCD/ATC XL dilengkapi dengan sistem pergantian alat otomatis, masing-masing dengan 16 dan 25 slot, serta area kerja yang sama yaitu 325 x 495 mm untuk CCD/ATC dan 500 x 600 mm untuk CCD/ATC XL."
+            "Semua mesin ini memiliki resolusi hingga 0,01 µm, kecepatan spindle 5.000-63.000 RPM, kecepatan maksimum 9.000 mm/menit, dan akurasi posisi 3,2 µm. Mesin ini mendukung pengeboran cepat hingga 18.000 lubang per jam dan dapat digunakan untuk memproses material seperti papan rak 19 inci, plastik, aluminium, dan logam lainnya. Selain itu, mesin ini dilengkapi fitur fiksasi papan dengan berbagai opsi seperti klem, pin referensi, hingga fiksasi vakum opsional, menjadikannya solusi fleksibel untuk berbagai kebutuhan pemrosesan material."
+        )
     }
 
     # Link panduan YouTube
@@ -249,17 +254,19 @@ def handle_option_selection(update: Update, context: CallbackContext):
         'hellas_guide': 'https://youtu.be/tHK9b2zqM_s?feature=shared',
         'splash_etching_guide': 'https://youtu.be/4r6z7Hq61ic?si=9gPJwwRnrKSEOBg9',
         'wwtu_guide': 'https://youtu.be/-usoUvP31x8?feature=shared',
-        'dfl_guide': 'https://youtu.be/-EeWD3-y4N4?si=SoEH5o3nIxWnO6P7'
+        'dfl_guide': 'https://youtu.be/-EeWD3-y4N4?si=SoEH5o3nIxWnO6P7',
+        'cnc_guide': 'https://youtu.be/2j-Wynz2FDY?si=vQwL0kRraYu-1GdG7'
     }
 
     # File gambar lokasi
     image_files = {
         'brushing_milling_location': os.path.join(UPLOAD_DIR, 'brushing_milling.png'),
-        'thp_location': os.path.join(UPLOAD_DIR, 'thp.png'),
-        'hellas_location': os.path.join(UPLOAD_DIR, 'hellas.png'),
-        'splash_etching_location': os.path.join(UPLOAD_DIR, 'splash_etching.png'),
-        'wwtu_location': os.path.join(UPLOAD_DIR, 'wwtu.png'),
-        'dfl_location': os.path.join(UPLOAD_DIR, 'dfl.png')
+        'thp_location': os.path.join(UPLOAD_DIR, 'thp.pdf'),
+        'hellas_location': os.path.join(UPLOAD_DIR, 'hellas.pdf'),
+        'splash_etching_location': os.path.join(UPLOAD_DIR, 'splash.pdf'),
+        'wwtu_location': os.path.join(UPLOAD_DIR, 'wwtu.pdf'),
+        'dfl_location': os.path.join(UPLOAD_DIR, 'dfl.pdf'),
+        'cnc_location': os.path.join(UPLOAD_DIR, 'cnc.pdf')
     }
 
     chat_id = query.message.chat_id
@@ -296,7 +303,7 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
     dispatcher.add_handler(CallbackQueryHandler(handle_main_menu_selection, pattern='^(rules|room_booking|tools_menu)$'))
-    dispatcher.add_handler(CallbackQueryHandler(handle_tool_selection, pattern='^(brushing_milling|thp|hellas|splash_etching|wwtu|dfl|back_to_main|finish|exit)$'))
+    dispatcher.add_handler(CallbackQueryHandler(handle_tool_selection, pattern='^(brushing_milling|thp|hellas|splash_etching|wwtu|dfl|cnc|back_to_main|finish|exit)$'))
     dispatcher.add_handler(CallbackQueryHandler(handle_option_selection, pattern='.*_(description|guide|location)$'))
 
     updater.start_polling()
