@@ -260,7 +260,7 @@ def handle_option_selection(update: Update, context: CallbackContext):
 
     # File gambar lokasi
     image_files = {
-        'brushing_milling_location': os.path.join(UPLOAD_DIR, 'brushing_milling.png'),
+        'brushing_milling_location': os.path.join(UPLOAD_DIR, 'brush.pdf'),
         'thp_location': os.path.join(UPLOAD_DIR, 'thp.pdf'),
         'hellas_location': os.path.join(UPLOAD_DIR, 'hellas.pdf'),
         'splash_etching_location': os.path.join(UPLOAD_DIR, 'splash.pdf'),
